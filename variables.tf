@@ -46,9 +46,9 @@ variable "cluster_id" {
   }
 }
 
-variable "slurm-version" {
+variable "slurm_version" {
   type = string
-  default = ""
+  default = "21.08.5-2ubuntu1"
   description = "The explicit version tag for the slurm-wlm package. Leave empty for latest package on distro version. e.g For Jammy, see https://packages.ubuntu.com/search?keywords=slurm-wlm&searchon=names&suite=jammy&section=all"
 }
 
