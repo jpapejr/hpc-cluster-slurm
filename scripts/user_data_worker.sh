@@ -90,7 +90,7 @@ copyFile /mnt/data/munge.key /etc/munge/munge.key 10 30 $logfile
 # copy the hosts list from nfs to worker
 copyFile /mnt/data/hosts /etc/hosts 10 30 $logfile
 #copy the configuration file from nfs to worker
-copyFile /mnt/data/slurm.conf /etc/slurm-llnl/slurm.conf 10 30 $logfile
+copyFile /mnt/data/slurm.conf /etc/slurm/slurm.conf 10 30 $logfile
 
 # After transferring munge key from management node to worker node
 # cd /etc/munge/
@@ -109,12 +109,12 @@ sudo chmod 400 /etc/munge/munge.key
 sudo systemctl enable munge
 sudo systemctl restart munge
 
-sudo mkdir /var/spool/slurm-llnl
-sudo chown slurm:slurm /var/spool/slurm-llnl
+sudo mkdir /var/spool/slurm
+sudo chown slurm:slurm /var/spool/slurm
 chmod 755 /var/spool/
 
-sudo mkdir /var/run/slurm-llnl
-sudo chown slurm:slurm /var/run/slurm-llnl
+sudo mkdir /var/run/slurm
+sudo chown slurm:slurm /var/run/slurm
 
 # worker node
 sudo systemctl enable slurmd

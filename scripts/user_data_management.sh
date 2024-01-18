@@ -68,8 +68,8 @@ if ([ -n "${nfs_server}" ] && [ -n "${nfs_mount_dir}" ]); then
   #mv /root/.ssh/id_rsa /home/slurm/.ssh/
   #cp /home/slurm/.ssh/id_rsa /root/.ssh
 
-  sudo mkdir -p /mnt/$nfs_mount_dir/slurm-llnl
-  sudo chown slurm:slurm /mnt/$nfs_mount_dir/slurm-llnl
+  sudo mkdir -p /mnt/$nfs_mount_dir/slurm
+  sudo chown slurm:slurm /mnt/$nfs_mount_dir/slurm
 
 else
   echo "No NFS server and share found!" >> $logfile
@@ -137,7 +137,7 @@ else
 fi
 
 # Now set up slurm.conf
-cat > /etc/slurm-llnl/slurm.conf << EOF
+cat > /etc/slurm/slurm.conf << EOF
 # Slurm Configuration file
 # Should be the same across management node and all worker nodes
 
@@ -183,12 +183,12 @@ SlurmctldPidFile=/var/run/slurmctld.pid
 SlurmctldPort=6817
 SlurmdPidFile=/var/run/slurmd.pid
 SlurmdPort=6818
-SlurmdSpoolDir=/var/spool/slurm-llnl/ctld
+SlurmdSpoolDir=/var/spool/slurm/ctld
 SlurmUser=slurm
 #SlurmdUser=root
 #SrunEpilog=
 #SrunProlog=
-StateSaveLocation=/mnt/data/slurm-llnl
+StateSaveLocation=/mnt/data/slurm
 SwitchType=switch/none
 #TaskEpilog=
 TaskPlugin=task/affinity
@@ -251,13 +251,13 @@ SelectTypeParameters=CR_Core
 #AccountingStoragePass=
 #AccountingStoragePort=
 AccountingStorageType=accounting_storage/filetxt
-AccountingStorageLoc=/var/log/slurm-llnl/acct_completions
+AccountingStorageLoc=/var/log/slurm/acct_completions
 #AccountingStorageUser=
 AccountingStoreJobComment=YES
 ClusterName=SlurmCluster
 #DebugFlags=
 #JobCompHost=
-JobCompLoc=/var/log/slurm-llnl/job_completions
+JobCompLoc=/var/log/slurm/job_completions
 #JobCompPass=
 #JobCompPort=
 JobCompType=jobcomp/filetxt
@@ -266,10 +266,10 @@ JobCompType=jobcomp/filetxt
 JobAcctGatherFrequency=30
 JobAcctGatherType=jobacct_gather/none
 SlurmctldDebug=debug
-SlurmctldLogFile=/var/log/slurm-llnl/slurmctld.log
+SlurmctldLogFile=/var/log/slurm/slurmctld.log
 SlurmdDebug=debug
-SlurmdLogFile=/var/log/slurm-llnl/slurmd.log
-SlurmSchedLogFile=/var/log/slurm-llnl/slurmsched.log
+SlurmdLogFile=/var/log/slurm/slurmd.log
+SlurmSchedLogFile=/var/log/slurm/slurmsched.log
 #SlurmSchedLogLevel=
 #
 #
@@ -294,11 +294,11 @@ EOF
 sudo systemctl enable munge
 sudo systemctl start munge
 
-sudo mkdir /var/spool/slurm-llnl
-sudo chown slurm:slurm /var/spool/slurm-llnl
+sudo mkdir /var/spool/slurm
+sudo chown slurm:slurm /var/spool/slurm
 
-sudo mkdir /var/run/slurm-llnl
-sudo chown slurm:slurm /var/run/slurm-llnl
+sudo mkdir /var/run/slurm
+sudo chown slurm:slurm /var/run/slurm
 
 # create that log file in management node
 touch /var/log/slurm_jobcomp.log
@@ -316,7 +316,7 @@ cp /etc/munge/munge.key /mnt/data/
 cp /etc/hosts /mnt/data/
 
 # copy the config file from management node to nfs shared
-cp /etc/slurm-llnl/slurm.conf /mnt/data/
+cp /etc/slurm/slurm.conf /mnt/data/
 
 # restart munge and deamons on every node
 systemctl restart munge
