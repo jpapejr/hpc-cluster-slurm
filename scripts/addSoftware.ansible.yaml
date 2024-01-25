@@ -1,0 +1,10 @@
+---
+- name: Deploy Software on Workers
+  hosts: worker
+  roles:
+    - role: buluma.roles.bootstrap
+    - role: buluma.roles.core_dependencies
+    - role: buluma.roles.epel
+    - role: buluma.roles.buildtools
+    - role: buluma.roles.python_pip
+    - role: buluma.roles.anaconda

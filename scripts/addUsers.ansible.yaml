@@ -1,0 +1,42 @@
+---
+- name: Create an RSA keypair for the new user
+  hosts: localhost
+  tasks:
+    - name: Create RSA key pair
+      community.crypto.openssh_keypair:
+        path: ./id_rsa
+        type: rsa
+        size: 4096
+        state: present
+        force: false
+- name: Create Slurm User
+  hosts: all
+  become: true
+  tasks:
+    - name: Create user with ID 6001
+      ansible.builtin.user:
+        name: slurmuser
+        shell: /bin/bash
+        uid: 6001
+        comment: A basic Slurm user
+        createhome: true
+        state: present
+    - name: Ensure .ssh folder in /home/slurmuser
+      ansible.builtin.file:
+        path: /home/slurmuser/.ssh
+        state: directory
+        mode: '0700'
+        owner: slurmuser
+        group: slurmuser
+    - name: Deploy public ssh key on all hosts
+      ansible.posix.authorized_key:
+        user: slurmuser
+        key: "{{ lookup('file', './id_rsa.pub') }}"
+    - name: Create folder in /mnt/data for user
+      ansible.builtin.file:
+        path: /mnt/data/slurmuser
+        state: directory
+        mode: '0700'
+        owner: slurmuser
+        group: slurmuser
+   
